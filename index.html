@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>下見報告書</title>
+
+<!-- Tailwind CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+<body class="bg-gray-100 p-4">
+
+<!-- ★ 会社名（スタイルA） -->
+<h1 class="text-2xl font-bold text-center mb-1">株式会社塚腰運送</h1>
+<h2 class="text-xl font-bold text-center mb-4">下見報告書</h2>
+
+<form id="form" class="bg-white p-4 rounded-lg shadow space-y-4">
+  <input type="hidden" id="editIndex">
+
+  <!-- 基本情報 -->
+  <div>
+    <label class="font-semibold">ご依頼者様</label>
+    <input type="text" id="client" required class="w-full p-3 border rounded">
+  </div>
+
+  <div>
+    <label class="font-semibold">日時</label>
+    <input type="datetime-local" id="date" required class="w-full p-3 border rounded">
+  </div>
+
+  <div>
+    <label class="font-semibold">場所（住所）</label>
+    <input type="text" id="location" class="w-full p-3 border rounded">
+
+    <!-- ★ Googleマップで開く -->
+    <button type="button" onclick="openMap()" class="w-full bg-green-600 text-white p-3 rounded-lg mt-2">
+      Googleマップで開く
+    </button>
+  </div>
+
+  <!-- 現場情報 -->
+  <div>
+    <label class="font-semibold">現場名</label>
+    <input type="text" id="siteName" class="w-full p-3 border rounded">
+  </div>
+
+  <div>
+    <label class="font-semibold">担当者名</label>
+    <input type="text" id="person" class="w-full p-3 border rounded">
+  </div>
+
+  <div>
+    <label class="font-semibold">連絡先（電話番号）</label>
+    <input type="tel" id="tel" class="w-full p-3 border rounded">
+  </div>
+
+  <!-- 作業情報 -->
+  <div>
+    <label class="font-semibold">作業内容</label>
+    <textarea id="work" class="w-full p-3 border rounded"></textarea>
+  </div>
+
+  <div>
+    <label class="font-semibold">作業人数</label>
+    <input type="number" id="workers" min="1" class="w-full p-3 border rounded">
+  </div>
+
+  <!-- 必要車両（台数入力） -->
+  <div>
+    <label class="font-semibold">必要車両（台数を入力）</label>
+    <div class="space-y-3 p-3 border rounded bg-gray-50">
+
+      <div class="flex items-center gap-3">
+        <span class="w-28">軽トラ</span>
+        <input type="number" id="v1" min="0" value="0" class="w-20 p-2 border rounded">
+        <span>台</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="w-28">バン</span>
+        <input type="number" id="v2" min="0" value="0" class="w-20 p-2 border rounded">
+        <span>台</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="w-28">2tトラック</span>
+        <input type="number" id="v3" min="0" value="0" class="w-20 p-2 border rounded">
+        <span>台</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="w-28">4tトラック</span>
+        <input type="number" id="v4" min="0" value="0" class="w-20 p-2 border rounded">
+        <span>台</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="w-28">10tトラック</span>
+        <input type="number" id="v5" min="0" value="0" class="w-20 p-2 border rounded">
+        <span>台</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div>
+    <label class="font-semibold">必要な道具・材料</label>
+    <textarea id="tools" class="w-full p-3 border rounded"></textarea>
+  </div>
+
+  <div>
+    <label class="font-semibold">現場状況</label>
+    <textarea id="condition" class="w-full p-3 border rounded"></textarea>
+  </div>
+
+  <div>
+    <label class="font-semibold">駐車スペース</label>
+    <select id="parking" class="w-full p-3 border rounded">
+      <option value="あり">あり</option>
+      <option value="なし">なし</option>
+    </select>
+  </div>
+
+  <div>
+    <label class="font-semibold">搬入経路</label>
+    <textarea id="route" class="w-full p-3 border rounded"></textarea>
+  </div>
+
+  <div>
+    <label class="font-semibold">危険箇所</label>
+    <textarea id="danger" class="w-full p-3 border rounded"></textarea>
+  </div>
+
+  <div>
+    <label class="font-semibold">備考</label>
+    <textarea id="note" class="w-full p-3 border rounded"></textarea>
+  </div>
+
+  <!-- 写真 -->
+  <div>
+    <label class="font-semibold">写真</label>
+    <input type="file" id="photo" multiple class="w-full">
+  </div>
+
+  <div id="preview" class="flex flex-wrap gap-2"></div>
+
+  <button type="submit" class="w-full bg-blue-600 text-white p-4 rounded-lg text-lg">
+    保存
+  </button>
+</form>
+
+<hr class="my-6">
+
+<div id="list" class="space-y-4"></div>
+
+<script>
+/* Googleマップで開く */
+function openMap() {
+  const address = document.getElementById("location").value;
+  if (!address) {
+    alert("住所を入力してください");
+    return;
+  }
+  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  window.open(url, "_blank");
+}
+
+const form = document.getElementById("form");
+const photo = document.getElementById("photo");
+const preview = document.getElementById("preview");
+const list = document.getElementById("list");
+
+let photos = [];
+
+/* 画像表示 */
+photo.addEventListener("change", e => {
+  photos = [];
+  preview.innerHTML = "";
+
+  [...e.target.files].forEach(file => {
+    const reader = new FileReader();
+
+    reader.onload = ev => {
+      photos.push(ev.target.result);
+
+      const img = document.createElement("img");
+      img.src = ev.target.result;
+      img.className = "w-24 h-24 object-cover rounded border";
+      preview.appendChild(img);
+    };
+
+    reader.readAsDataURL(file);
+  });
+});
+
+/* 保存 */
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const data = {
+    client: client.value,
+    date: date.value,
+    location: location.value,
+
+    siteName: siteName.value,
+    person: person.value,
+    tel: tel.value,
+
+    work: work.value,
+    workers: workers.value,
+
+    vehicle: [
+      v1.value > 0 ? `軽トラ ${v1.value}台` : null,
+      v2.value > 0 ? `バン ${v2.value}台` : null,
+      v3.value > 0 ? `2tトラック ${v3.value}台` : null,
+      v4.value > 0 ? `4tトラック ${v4.value}台` : null,
+      v5.value > 0 ? `10tトラック ${v5.value}台` : null
+    ].filter(v => v !== null),
+
+    tools: tools.value,
+    condition: condition.value,
+    parking: parking.value,
+    note: note.value,
+
+    route: route.value,
+    danger: danger.value,
+
+    photos
+  };
+
+  const saved = JSON.parse(localStorage.getItem("data") || "[]");
+
+  if (editIndex.value !== "") {
+    saved[editIndex.value] = data;
+  } else {
+    saved.push(data);
+  }
+
+  localStorage.setItem("data", JSON.stringify(saved));
+
+  form.reset();
+  preview.innerHTML = "";
+  photos = [];
+  editIndex.value = "";
+  load();
+});
+
+/* 表示 */
+function load() {
+  const saved = JSON.parse(localStorage.getItem("data") || "[]");
+  list.innerHTML = "";
+
+  saved.forEach((d, index) => {
+
+    if (!Array.isArray(d.vehicle)) d.vehicle = [d.vehicle];
+
+    const div = document.createElement("div");
+    div.className = "bg-white p-4 rounded-lg shadow";
+
+    div.innerHTML = `
+      <p class="text-lg font-bold">ご依頼者様：${d.client}</p>
+      <p>${d.date}</p>
+      <p>${d.location}</p>
+
+      <p>現場名：${d.siteName}</p>
+      <p>担当者：${d.person}</p>
+      <p>連絡先：${d.tel}</p>
+
+      <p>作業内容：${d.work}</p>
+      <p>作業人数：${d.workers}</p>
+      <p>必要車両：${d.vehicle.join("、")}</p>
+      <p>必要な道具・材料：${d.tools}</p>
+      <p>現場状況：${d.condition}</p>
+      <p>駐車スペース：${d.parking}</p>
+
+      <p>搬入経路：${d.route}</p>
+      <p>危険箇所：${d.danger}</p>
+
+      <p>備考：${d.note}</p>
+
+      <div class="flex flex-wrap gap-2 mt-2">
+        ${d.photos.map(p => `<img src="${p}" class="w-20 h-20 object-cover rounded border">`).join("")}
+      </div>
+
+      <div class="flex gap-2 mt-3">
+        <button onclick="editItem(${index})" class="flex-1 bg-yellow-500 text-white p-2 rounded">編集</button>
+        <button onclick="deleteItem(${index})" class="flex-1 bg-red-500 text-white p-2 rounded">削除</button>
+        <button onclick="printItem(${index})" class="flex-1 bg-blue-500 text-white p-2 rounded">印刷</button>
+        <button onclick="sendMail(${index})" class="flex-1 bg-green-500 text-white p-2 rounded">メール</button>
+      </div>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+/* 編集 */
+function editItem(index) {
+  const saved = JSON.parse(localStorage.getItem("data") || "[]");
+  const d = saved[index];
+
+  if (!Array.isArray(d.vehicle)) d.vehicle = [d.vehicle];
+
+  client.value = d.client;
+  date.value = d.date;
+  location.value = d.location;
+
+  siteName.value = d.siteName;
+  person.value = d.person;
+  tel.value = d.tel;
+
+  work.value = d.work;
+  workers.value = d.workers;
+
+  v1.value = d.vehicle.find(v => v.includes("軽トラ"))?.match(/\d+/)?.[0] || 0;
+  v2.value = d.vehicle.find(v => v.includes("バン"))?.match(/\d+/)?.[0] || 0;
+  v3.value = d.vehicle.find(v => v.includes("2t"))?.match(/\d+/)?.[0] || 0;
+  v4.value = d.vehicle.find(v => v.includes("4t"))?.match(/\d+/)?.[0] || 0;
+  v5.value = d.vehicle.find(v => v.includes("10t"))?.match(/\d+/)?.[0] || 0;
+
+  tools.value = d.tools;
+  condition.value = d.condition;
+  parking.value = d.parking;
+  note.value = d.note;
+
+  route.value = d.route;
+  danger.value = d.danger;
+
+  photos = d.photos;
+  preview.innerHTML = d.photos
+    .map(p => `<img src="${p}" class="w-24 h-24 object-cover rounded border">`)
+    .join("");
+
+  editIndex.value = index;
+
+  window.scrollTo(0, 0);
+}
+
+/* 削除 */
+function deleteItem(index) {
+  if (!confirm("削除しますか？")) return;
+
+  const saved = JSON.parse(localStorage.getItem("data") || "[]");
+  saved.splice(index, 1);
+
+  localStorage.setItem("data", JSON.stringify(saved));
+  load();
+}
+
+/* 印刷 */
+function printItem(index) {
+  const saved = JSON.parse(localStorage.getItem("data") || "[]");
+  const d = saved[index];
+
+  const w = window.open("", "_blank");
+
+  w.document.write(`
+    <h1>株式会社塚腰運送</h1>
+    <h2>下見報告書</h2>
+
+    <p>ご依頼者様：${d.client}</p>
+    <p>日時：${d.date}</p>
+    <p>場所：${d.location}</p>
+
+    <p>現場名：${d.siteName}</p>
+    <p>担当者：${d.person}</p>
+    <p>連絡先：${d.tel}</p>
+
+    <p>作業内容：${d.work}</p>
+    <p>作業人数：${d.workers}</p>
+    <p>必要車両：${d.vehicle.join("、")}</p>
+    <p>必要な道具・材料：${d.tools}</p>
+    <p>現場状況：${d.condition}</p>
+    <p>駐車スペース：${d.parking}</p>
+
+    <p>搬入経路：${d.route}</p>
+    <p>危険箇所：${d.danger}</p>
+
+    <p>備考：${d.note}</p>
+
+    <h3>写真</h3>
+    ${d.photos.map(p => `<img src="${p}" style="width:150px;margin:5px;">`).join("")}
+  `);
+
+  w.print();
+}
+
+/* メール送信 */
+function sendMail(index) {
+  const saved = JSON.parse(localStorage.getItem("data") || "[]");
+  const d = saved[index];
+
+  const body = `
+株式会社塚腰運送
+
+ご依頼者様：${d.client}
+日時：${d.date}
+場所：${d.location}
+
+現場名：${d.siteName}
+担当者：${d.person}
+連絡先：${d.tel}
+
+作業内容：${d.work}
+作業人数：${d.workers}
+必要車両：${d.vehicle.join("、")}
+必要な道具・材料：${d.tools}
+現場状況：${d.condition}
+駐車スペース：${d.parking}
+
+搬入経路：${d.route}
+危険箇所：${d.danger}
+
+備考：${d.note}
+  `;
+
+  const mailto = `mailto:?subject=下見報告書&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+}
+
+</script>
+
+</body>
+</html>
