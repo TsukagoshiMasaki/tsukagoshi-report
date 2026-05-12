@@ -10,7 +10,6 @@
 </head>
 <body class="bg-gray-100 p-4">
 
-<!-- ★ 会社名（スタイルA） -->
 <h1 class="text-2xl font-bold text-center mb-1">株式会社塚腰運送</h1>
 <h2 class="text-xl font-bold text-center mb-4">下見報告書</h2>
 
@@ -32,7 +31,6 @@
     <label class="font-semibold">場所（住所）</label>
     <input type="text" id="location" class="w-full p-3 border rounded">
 
-    <!-- ★ Googleマップで開く -->
     <button type="button" onclick="openMap()" class="w-full bg-green-600 text-white p-3 rounded-lg mt-2">
       Googleマップで開く
     </button>
@@ -65,38 +63,50 @@
     <input type="number" id="workers" min="1" class="w-full p-3 border rounded">
   </div>
 
-  <!-- 必要車両（台数入力） -->
+  <!-- 必要車両 -->
   <div>
     <label class="font-semibold">必要車両（台数を入力）</label>
     <div class="space-y-3 p-3 border rounded bg-gray-50">
 
       <div class="flex items-center gap-3">
-        <span class="w-28">軽トラ</span>
+        <span class="w-28">人員輸送車</span>
         <input type="number" id="v1" min="0" value="0" class="w-20 p-2 border rounded">
         <span>台</span>
       </div>
 
       <div class="flex items-center gap-3">
-        <span class="w-28">バン</span>
+        <span class="w-28">2tトラック</span>
         <input type="number" id="v2" min="0" value="0" class="w-20 p-2 border rounded">
         <span>台</span>
       </div>
 
       <div class="flex items-center gap-3">
-        <span class="w-28">2tトラック</span>
+        <span class="w-28">4tトラック</span>
         <input type="number" id="v3" min="0" value="0" class="w-20 p-2 border rounded">
         <span>台</span>
       </div>
 
       <div class="flex items-center gap-3">
-        <span class="w-28">4tトラック</span>
+        <span class="w-28">6tトラック</span>
         <input type="number" id="v4" min="0" value="0" class="w-20 p-2 border rounded">
         <span>台</span>
       </div>
 
       <div class="flex items-center gap-3">
-        <span class="w-28">10tトラック</span>
+        <span class="w-28">8tトラック</span>
         <input type="number" id="v5" min="0" value="0" class="w-20 p-2 border rounded">
+        <span>台</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="w-28">10tトラック</span>
+        <input type="number" id="v6" min="0" value="0" class="w-20 p-2 border rounded">
+        <span>台</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="w-28">トレーラー</span>
+        <input type="number" id="v7" min="0" value="0" class="w-20 p-2 border rounded">
         <span>台</span>
       </div>
 
@@ -210,11 +220,13 @@ form.addEventListener("submit", e => {
     workers: workers.value,
 
     vehicle: [
-      v1.value > 0 ? `軽トラ ${v1.value}台` : null,
-      v2.value > 0 ? `バン ${v2.value}台` : null,
-      v3.value > 0 ? `2tトラック ${v3.value}台` : null,
-      v4.value > 0 ? `4tトラック ${v4.value}台` : null,
-      v5.value > 0 ? `10tトラック ${v5.value}台` : null
+      v1.value > 0 ? `人員輸送車 ${v1.value}台` : null,
+      v2.value > 0 ? `2tトラック ${v2.value}台` : null,
+      v3.value > 0 ? `4tトラック ${v3.value}台` : null,
+      v4.value > 0 ? `6tトラック ${v4.value}台` : null,
+      v5.value > 0 ? `8tトラック ${v5.value}台` : null,
+      v6.value > 0 ? `10tトラック ${v6.value}台` : null,
+      v7.value > 0 ? `トレーラー ${v7.value}台` : null
     ].filter(v => v !== null),
 
     tools: tools.value,
@@ -312,11 +324,13 @@ function editItem(index) {
   work.value = d.work;
   workers.value = d.workers;
 
-  v1.value = d.vehicle.find(v => v.includes("軽トラ"))?.match(/\d+/)?.[0] || 0;
-  v2.value = d.vehicle.find(v => v.includes("バン"))?.match(/\d+/)?.[0] || 0;
-  v3.value = d.vehicle.find(v => v.includes("2t"))?.match(/\d+/)?.[0] || 0;
-  v4.value = d.vehicle.find(v => v.includes("4t"))?.match(/\d+/)?.[0] || 0;
-  v5.value = d.vehicle.find(v => v.includes("10t"))?.match(/\d+/)?.[0] || 0;
+  v1.value = d.vehicle.find(v => v.includes("人員輸送車"))?.match(/\d+/)?.[0] || 0;
+  v2.value = d.vehicle.find(v => v.includes("2t"))?.match(/\d+/)?.[[0]] || 0;
+  v3.value = d.vehicle.find(v => v.includes("4t"))?.match(/\d+/)?.[0] || 0;
+  v4.value = d.vehicle.find(v => v.includes("6t"))?.match(/\d+/)?.[0] || 0;
+  v5.value = d.vehicle.find(v => v.includes("8t"))?.match(/\d+/)?.[0] || 0;
+  v6.value = d.vehicle.find(v => v.includes("10t"))?.match(/\d+/)?.[0] || 0;
+  v7.value = d.vehicle.find(v => v.includes("トレーラー"))?.match(/\d+/)?.[0] || 0;
 
   tools.value = d.tools;
   condition.value = d.condition;
@@ -418,6 +432,7 @@ function sendMail(index) {
   window.location.href = mailto;
 }
 
+load();
 </script>
 
 </body>
