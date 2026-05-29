@@ -22,9 +22,11 @@
     <input type="text" id="client" required class="w-full p-3 border rounded">
   </div>
 
+
+
   <div>
-    <label class="font-semibold">日時</label>
-    <input type="datetime-local" id="date" required class="w-full p-3 border rounded">
+    <label class="font-semibold">現場名</label>
+    <input type="text" id="siteName" class="w-full p-3 border rounded">
   </div>
 
   <div>
@@ -36,21 +38,50 @@
     </button>
   </div>
 
-  <!-- 現場情報 -->
-  <div>
-    <label class="font-semibold">現場名</label>
-    <input type="text" id="siteName" class="w-full p-3 border rounded">
-  </div>
 
   <div>
-    <label class="font-semibold">担当者名</label>
+    <label class="font-semibold">現場担当者名</label>
     <input type="text" id="person" class="w-full p-3 border rounded">
   </div>
 
   <div>
-    <label class="font-semibold">連絡先（電話番号）</label>
+    <label class="font-semibold">現場担当者連絡先（電話番号）</label>
     <input type="tel" id="tel" class="w-full p-3 border rounded">
   </div>
+
+　<div>
+    <label class="font-semibold">作業日時</label>
+    <input type="datetime-local" id="date" required class="w-full p-3 border rounded">
+  </div>　　
+
+  <!-- 作業区分（作業内容の上に追加） -->
+
+
+<!-- 作業区分（作業内容の上に追加） -->
+<div class="form-group" style="font-size: 20px; margin-bottom: 12px;">
+    <label style="font-weight: bold;">【作業区分】</label><br>
+
+    <label style="margin-right: 20px;">
+        <input type="checkbox" name="workType" value="搬入" style="transform: scale(1.3); margin-right: 4px;">
+        搬入
+    </label>
+
+    <label style="margin-right: 20px;">
+        <input type="checkbox" name="workType" value="搬出" style="transform: scale(1.3); margin-right: 4px;">
+        搬出
+    </label>
+
+    <label style="margin-right: 20px;">
+        <input type="checkbox" name="workType" value="移設" style="transform: scale(1.3); margin-right: 4px;">
+        移設
+    </label>
+
+    <label>
+        <input type="checkbox" name="workType" value="搬入出" style="transform: scale(1.3); margin-right: 4px;">
+        搬入出
+    </label>
+</div>
+
 
   <!-- 作業情報 -->
   <div>
@@ -62,377 +93,449 @@
     <label class="font-semibold">作業人数</label>
     <input type="number" id="workers" min="1" class="w-full p-3 border rounded">
   </div>
-
   <!-- 必要車両 -->
-  <div>
-    <label class="font-semibold">必要車両（台数を入力）</label>
-    <div class="space-y-3 p-3 border rounded bg-gray-50">
+  <h3 class="text-lg font-bold mt-6 mb-2">必要車両</h3>
 
-      <div class="flex items-center gap-3">
-        <span class="w-28">人員輸送車</span>
-        <input type="number" id="v1" min="0" value="0" class="w-20 p-2 border rounded">
-        <span>台</span>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <span class="w-28">2tトラック</span>
-        <input type="number" id="v2" min="0" value="0" class="w-20 p-2 border rounded">
-        <span>台</span>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <span class="w-28">4tトラック</span>
-        <input type="number" id="v3" min="0" value="0" class="w-20 p-2 border rounded">
-        <span>台</span>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <span class="w-28">6tトラック</span>
-        <input type="number" id="v4" min="0" value="0" class="w-20 p-2 border rounded">
-        <span>台</span>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <span class="w-28">8tトラック</span>
-        <input type="number" id="v5" min="0" value="0" class="w-20 p-2 border rounded">
-        <span>台</span>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <span class="w-28">10tトラック</span>
-        <input type="number" id="v6" min="0" value="0" class="w-20 p-2 border rounded">
-        <span>台</span>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <span class="w-28">トレーラー</span>
-        <input type="number" id="v7" min="0" value="0" class="w-20 p-2 border rounded">
-        <span>台</span>
-      </div>
-
-    </div>
+  <!-- 人員輸送車 -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="van">
+    <span class="w-40">人員輸送車</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="van" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" placeholder="備考" data-id="van" disabled>
   </div>
 
-  <div>
-    <label class="font-semibold">必要な道具・材料</label>
-    <textarea id="tools" class="w-full p-3 border rounded"></textarea>
+  <!-- 2t -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="2t-gate">
+    <span class="w-40">2t（ゲート）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="2t-gate" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="2t-gate" placeholder="備考" disabled>
   </div>
 
-  <div>
-    <label class="font-semibold">現場状況</label>
-    <textarea id="condition" class="w-full p-3 border rounded"></textarea>
+  <!-- 4t -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="4t-normal">
+    <span class="w-40">4t（通常）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="4t-normal" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="4t-normal" placeholder="備考" disabled>
   </div>
 
-  <div>
-    <label class="font-semibold">駐車スペース</label>
-    <select id="parking" class="w-full p-3 border rounded">
-      <option value="あり">あり</option>
-      <option value="なし">なし</option>
-    </select>
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="4t-gate">
+    <span class="w-40">4t（ゲート）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="4t-gate" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="4t-gate" placeholder="備考" disabled>
   </div>
 
-  <div>
+  <!-- 6t -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="6t-normal">
+    <span class="w-40">6t（通常）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="6t-normal" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="6t-normal" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="6t-gate">
+    <span class="w-40">6t（ゲート）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="6t-gate" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="6t-gate" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="6t-temp">
+    <span class="w-40">6t（温調）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="6t-temp" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="6t-temp" placeholder="備考" disabled>
+  </div>
+
+  <!-- 8t -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="8t-normal">
+    <span class="w-40">8t（通常）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="8t-normal" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="8t-normal" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="8t-gate">
+    <span class="w-40">8t（ゲート）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="8t-gate" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="8t-gate" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="8t-temp">
+    <span class="w-40">8t（温調）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="8t-temp" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="8t-temp" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="8t-unic">
+    <span class="w-40">8t（ユニック）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="8t-unic" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="8t-unic" placeholder="備考" disabled>
+  </div>
+
+  <!-- 10t -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="10t-normal">
+    <span class="w-40">10t（通常）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="10t-normal" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="10t-normal" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="10t-gate">
+    <span class="w-40">10t（ゲート）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="10t-gate" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="10t-gate" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="10t-temp">
+    <span class="w-40">10t（温調）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="10t-temp" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="10t-temp" placeholder="備考" disabled>
+  </div>
+
+  <!-- 機材運搬車 -->
+  <h3 class="text-lg font-bold mt-6 mb-2">機材運搬車</h3>
+
+  <!-- 2t機材 -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="2t-m-normal">
+    <span class="w-40">2t機材（通常）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="2t-m-normal" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="2t-m-normal" placeholder="備考" disabled>
+  </div>
+
+  <!-- 4t機材 -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="4t-m-gate">
+    <span class="w-40">4t機材（ゲート）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="4t-m-gate" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="4t-m-gate" placeholder="備考" disabled>
+  </div>
+
+  <!-- 6t機材 -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="6t-m-temp">
+    <span class="w-40">6t機材（温調）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="6t-m-temp" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="6t-m-temp" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="6t-m-gate">
+    <span class="w-40">6t機材（ゲート）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="6t-m-gate" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="6t-m-gate" placeholder="備考" disabled>
+  </div>
+
+  <!-- 8t機材 -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="8t-m-normal">
+    <span class="w-40">8t機材（通常）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="8t-m-normal" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="8t-m-normal" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="8t-m-gate">
+    <span class="w-40">8t機材（ゲート）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="8t-m-gate" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="8t-m-gate" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="8t-m-temp">
+    <span class="w-40">8t機材（温調）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="8t-m-temp" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="8t-m-temp" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="8t-m-unic">
+    <span class="w-40">8t機材（ユニック）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="8t-m-unic" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="8t-m-unic" placeholder="備考" disabled>
+  </div>
+
+  <!-- 10t機材 -->
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="10t-m-normal">
+    <span class="w-40">10t機材（通常）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="10t-m-normal" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="10t-m-normal" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="10t-m-temp">
+    <span class="w-40">10t機材（温調）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="10t-m-temp" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="10t-m-temp" placeholder="備考" disabled>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <input type="checkbox" class="vehicle-check" data-id="10t-m-gate">
+    <span class="w-40">10t機材（ゲート）</span>
+    <input type="number" class="vehicle-count w-24 p-2 border rounded bg-gray-200" data-id="10t-m-gate" disabled>
+    <span>台</span>
+    <input type="text" class="vehicle-note flex-1 p-2 border rounded bg-gray-200" data-id="10t-m-gate" placeholder="備考" disabled>
+  </div>
+  <!-- 搬入経路 -->
+  <div class="mt-6">
     <label class="font-semibold">搬入経路</label>
     <textarea id="route" class="w-full p-3 border rounded"></textarea>
   </div>
 
+  <!-- 危険ポイント -->
   <div>
-    <label class="font-semibold">危険箇所</label>
+    <label class="font-semibold">危険ポイント</label>
     <textarea id="danger" class="w-full p-3 border rounded"></textarea>
   </div>
 
+  <!-- 駐車位置 -->
+  <div>
+    <label class="font-semibold">駐車位置</label>
+    <textarea id="parking" class="w-full p-3 border rounded"></textarea>
+  </div>
+
+  <!-- 備考 -->
   <div>
     <label class="font-semibold">備考</label>
     <textarea id="note" class="w-full p-3 border rounded"></textarea>
   </div>
 
-  <!-- 写真 -->
+  <!-- 写真添付 -->
   <div>
-    <label class="font-semibold">写真</label>
-    <input type="file" id="photo" multiple class="w-full">
+    <label class="font-semibold">写真添付</label>
+    <input type="file" id="photos" multiple class="w-full p-3 border rounded">
   </div>
 
-  <div id="preview" class="flex flex-wrap gap-2"></div>
+<!-- ボタン -->
+<div class="flex flex-wrap gap-3 mt-4">
+  <button type="button" onclick="saveData()" class="px-4 py-2 bg-blue-600 text-white rounded">一時保存</button>
+  <button type="button" onclick="loadData()" class="px-4 py-2 bg-green-600 text-white rounded">保存データ読込</button>
+  <button type="button" onclick="generateMail()" class="px-4 py-2 bg-indigo-600 text-white rounded">メール本文生成</button>
+  <button type="button" onclick="window.print()" class="px-4 py-2 bg-gray-700 text-white rounded">印刷</button>
 
-  <button type="submit" class="w-full bg-blue-600 text-white p-4 rounded-lg text-lg">
-    保存
+  <!-- ★ 追加：入力内容クリア -->
+  <button type="button" onclick="clearForm()" class="px-4 py-2 bg-red-500 text-white rounded">
+    入力内容クリア
   </button>
-</form>
 
-<hr class="my-6">
+  <!-- ★ 追加：保存データ削除 -->
+  <button type="button" onclick="deleteSavedData()" class="px-4 py-2 bg-yellow-600 text-white rounded">
+    保存データ削除
+  </button>
 
-<div id="list" class="space-y-4"></div>
+  <!-- ★ 追加：メール送信 -->
+  <button type="button" onclick="sendMail()" class="px-4 py-2 bg-purple-600 text-white rounded">
+    メール送信
+  </button>
+</div>
 
+<!-- ★ メール本文プレビュー（必ず form の中に置く） -->
+<div class="mt-4">
+  <label class="font-semibold">メール本文プレビュー</label>
+  <textarea id="mailPreview" class="w-full p-3 border rounded h-48" readonly></textarea>
+</div>
+
+</form>  <!-- ← この位置が正解！ -->
+
+
+<!-- JavaScript -->
 <script>
-/* Googleマップで開く */
+/* Googleマップ */
 function openMap() {
   const address = document.getElementById("location").value;
-  if (!address) {
-    alert("住所を入力してください");
-    return;
+  if (address) {
+    window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address));
   }
-  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-  window.open(url, "_blank");
 }
 
-const form = document.getElementById("form");
-const photo = document.getElementById("photo");
-const preview = document.getElementById("preview");
-const list = document.getElementById("list");
+/* チェックONで入力欄を有効化 */
+document.querySelectorAll(".vehicle-check").forEach(cb => {
+  cb.addEventListener("change", () => {
+    const id = cb.dataset.id;
+    const count = document.querySelector('.vehicle-count[data-id="' + id + '"]');
+    const note = document.querySelector('.vehicle-note[data-id="' + id + '"]');
+    const enable = cb.checked;
 
-let photos = [];
-
-/* 画像表示 */
-photo.addEventListener("change", e => {
-  photos = [];
-  preview.innerHTML = "";
-
-  [...e.target.files].forEach(file => {
-    const reader = new FileReader();
-
-    reader.onload = ev => {
-      photos.push(ev.target.result);
-
-      const img = document.createElement("img");
-      img.src = ev.target.result;
-      img.className = "w-24 h-24 object-cover rounded border";
-      preview.appendChild(img);
-    };
-
-    reader.readAsDataURL(file);
+    [count, note].forEach(el => {
+      el.disabled = !enable;
+      el.classList.toggle("bg-gray-200", !enable);
+      el.classList.toggle("bg-white", enable);
+    });
   });
 });
 
-/* 保存 */
-form.addEventListener("submit", e => {
-  e.preventDefault();
-
+/* 一時保存 */
+function saveData() {
   const data = {
     client: client.value,
     date: date.value,
     location: location.value,
-
     siteName: siteName.value,
     person: person.value,
     tel: tel.value,
-
     work: work.value,
     workers: workers.value,
-
-    vehicle: [
-      v1.value > 0 ? `人員輸送車 ${v1.value}台` : null,
-      v2.value > 0 ? `2tトラック ${v2.value}台` : null,
-      v3.value > 0 ? `4tトラック ${v3.value}台` : null,
-      v4.value > 0 ? `6tトラック ${v4.value}台` : null,
-      v5.value > 0 ? `8tトラック ${v5.value}台` : null,
-      v6.value > 0 ? `10tトラック ${v6.value}台` : null,
-      v7.value > 0 ? `トレーラー ${v7.value}台` : null
-    ].filter(v => v !== null),
-
-    tools: tools.value,
-    condition: condition.value,
-    parking: parking.value,
-    note: note.value,
-
     route: route.value,
     danger: danger.value,
-
-    photos
+    parking: parking.value,
+    note: note.value,
+    vehicles: []
   };
 
-  const saved = JSON.parse(localStorage.getItem("data") || "[]");
+  document.querySelectorAll(".vehicle-check").forEach(cb => {
+    const id = cb.dataset.id;
+    data.vehicles.push({
+      id,
+      checked: cb.checked,
+      count: document.querySelector('.vehicle-count[data-id="' + id + '"]').value,
+      note: document.querySelector('.vehicle-note[data-id="' + id + '"]').value
+    });
+  });
 
-  if (editIndex.value !== "") {
-    saved[editIndex.value] = data;
-  } else {
-    saved.push(data);
+  localStorage.setItem("previewData", JSON.stringify(data));
+  alert("保存しました");
+}
+
+/* 保存データ読込 */
+function loadData() {
+  const raw = localStorage.getItem("previewData");
+  if (!raw) return alert("保存データがありません");
+
+  const data = JSON.parse(raw);
+
+  client.value = data.client || "";
+  date.value = data.date || "";
+  location.value = data.location || "";
+  siteName.value = data.siteName || "";
+  person.value = data.person || "";
+  tel.value = data.tel || "";
+  work.value = data.work || "";
+  workers.value = data.workers || "";
+  route.value = data.route || "";
+  danger.value = data.danger || "";
+  parking.value = data.parking || "";
+  note.value = data.note || "";
+
+  if (data.vehicles) {
+    data.vehicles.forEach(v => {
+      const cb = document.querySelector('.vehicle-check[data-id="' + v.id + '"]');
+      const count = document.querySelector('.vehicle-count[data-id="' + v.id + '"]');
+      const note = document.querySelector('.vehicle-note[data-id="' + v.id + '"]');
+
+      if (!cb) return;
+
+      cb.checked = v.checked;
+      count.value = v.count;
+      note.value = v.note;
+
+      const enable = v.checked;
+      [count, note].forEach(el => {
+        el.disabled = !enable;
+        el.classList.toggle("bg-gray-200", !enable);
+        el.classList.toggle("bg-white", enable);
+      });
+    });
   }
 
-  localStorage.setItem("data", JSON.stringify(saved));
+  alert("保存データを読み込みました");
+}
 
-  form.reset();
-  preview.innerHTML = "";
-  photos = [];
-  editIndex.value = "";
-  load();
-});
+/* メール本文生成 */
+function generateMail() {
+  let text = "";
+  text += "【下見報告書】\n\n";
+  text += "■ご依頼者様\n" + client.value + "\n\n";
+  text += "■日時\n" + date.value + "\n\n";
+  text += "■場所\n" + location.value + "\n\n";
+  text += "■現場名\n" + siteName.value + "\n\n";
+  text += "■担当者\n" + person.value + "\n\n";
+  text += "■連絡先\n" + tel.value + "\n\n";
+  text += "■作業内容\n" + work.value + "\n\n";
+  text += "■作業人数\n" + workers.value + " 名\n\n";
 
-/* 表示 */
-function load() {
-  const saved = JSON.parse(localStorage.getItem("data") || "[]");
-  list.innerHTML = "";
+  text += "■必要車両\n";
+  document.querySelectorAll(".vehicle-check").forEach(cb => {
+    const id = cb.dataset.id;
+    const label = cb.parentElement.querySelector("span").textContent;
+    const count = document.querySelector('.vehicle-count[data-id="' + id + '"]').value;
+    const note = document.querySelector('.vehicle-note[data-id="' + id + '"]').value;
 
-  saved.forEach((d, index) => {
-
-    if (!Array.isArray(d.vehicle)) d.vehicle = [d.vehicle];
-
-    const div = document.createElement("div");
-    div.className = "bg-white p-4 rounded-lg shadow";
-
-    div.innerHTML = `
-      <p class="text-lg font-bold">ご依頼者様：${d.client}</p>
-      <p>${d.date}</p>
-      <p>${d.location}</p>
-
-      <p>現場名：${d.siteName}</p>
-      <p>担当者：${d.person}</p>
-      <p>連絡先：${d.tel}</p>
-
-      <p>作業内容：${d.work}</p>
-      <p>作業人数：${d.workers}</p>
-      <p>必要車両：${d.vehicle.join("、")}</p>
-      <p>必要な道具・材料：${d.tools}</p>
-      <p>現場状況：${d.condition}</p>
-      <p>駐車スペース：${d.parking}</p>
-
-      <p>搬入経路：${d.route}</p>
-      <p>危険箇所：${d.danger}</p>
-
-      <p>備考：${d.note}</p>
-
-      <div class="flex flex-wrap gap-2 mt-2">
-        ${d.photos.map(p => `<img src="${p}" class="w-20 h-20 object-cover rounded border">`).join("")}
-      </div>
-
-      <div class="flex gap-2 mt-3">
-        <button onclick="editItem(${index})" class="flex-1 bg-yellow-500 text-white p-2 rounded">編集</button>
-        <button onclick="deleteItem(${index})" class="flex-1 bg-red-500 text-white p-2 rounded">削除</button>
-        <button onclick="printItem(${index})" class="flex-1 bg-blue-500 text-white p-2 rounded">印刷</button>
-        <button onclick="sendMail(${index})" class="flex-1 bg-green-500 text-white p-2 rounded">メール</button>
-      </div>
-    `;
-
-    list.appendChild(div);
+    if (cb.checked && count) {
+      text += "・" + label + "：" + count + "台";
+      if (note) text += "（" + note + "）";
+      text += "\n";
+    }
   });
+
+  text += "\n■搬入経路\n" + route.value + "\n\n";
+  text += "■危険ポイント\n" + danger.value + "\n\n";
+  text += "■駐車位置\n" + parking.value + "\n\n";
+  text += "■備考\n" + note.value + "\n\n";
+
+  document.getElementById("mailPreview").value = text;
+  alert("メール本文を生成しました");
 }
 
-/* 編集 */
-function editItem(index) {
-  const saved = JSON.parse(localStorage.getItem("data") || "[]");
-  const d = saved[index];
+/* ★ 追加：入力内容クリア */
+function clearForm() {
+  document.getElementById("form").reset();
 
-  if (!Array.isArray(d.vehicle)) d.vehicle = [d.vehicle];
+  document.querySelectorAll(".vehicle-count, .vehicle-note").forEach(el => {
+    el.value = "";
+    el.disabled = true;
+    el.classList.add("bg-gray-200");
+    el.classList.remove("bg-white");
+  });
 
-  client.value = d.client;
-  date.value = d.date;
-  location.value = d.location;
+  document.getElementById("mailPreview").value = "";
 
-  siteName.value = d.siteName;
-  person.value = d.person;
-  tel.value = d.tel;
-
-  work.value = d.work;
-  workers.value = d.workers;
-
-  v1.value = d.vehicle.find(v => v.includes("人員輸送車"))?.match(/\d+/)?.[0] || 0;
-  v2.value = d.vehicle.find(v => v.includes("2t"))?.match(/\d+/)?.[[0]] || 0;
-  v3.value = d.vehicle.find(v => v.includes("4t"))?.match(/\d+/)?.[0] || 0;
-  v4.value = d.vehicle.find(v => v.includes("6t"))?.match(/\d+/)?.[0] || 0;
-  v5.value = d.vehicle.find(v => v.includes("8t"))?.match(/\d+/)?.[0] || 0;
-  v6.value = d.vehicle.find(v => v.includes("10t"))?.match(/\d+/)?.[0] || 0;
-  v7.value = d.vehicle.find(v => v.includes("トレーラー"))?.match(/\d+/)?.[0] || 0;
-
-  tools.value = d.tools;
-  condition.value = d.condition;
-  parking.value = d.parking;
-  note.value = d.note;
-
-  route.value = d.route;
-  danger.value = d.danger;
-
-  photos = d.photos;
-  preview.innerHTML = d.photos
-    .map(p => `<img src="${p}" class="w-24 h-24 object-cover rounded border">`)
-    .join("");
-
-  editIndex.value = index;
-
-  window.scrollTo(0, 0);
+  alert("入力内容をクリアしました");
 }
 
-/* 削除 */
-function deleteItem(index) {
-  if (!confirm("削除しますか？")) return;
-
-  const saved = JSON.parse(localStorage.getItem("data") || "[]");
-  saved.splice(index, 1);
-
-  localStorage.setItem("data", JSON.stringify(saved));
-  load();
+/* ★ 追加：保存データ削除 */
+function deleteSavedData() {
+  localStorage.removeItem("previewData");
+  alert("保存データを削除しました");
 }
+function sendMail() {
+  const body = encodeURIComponent(document.getElementById("mailPreview").value);
+  const subject = encodeURIComponent("下見報告書");
 
-/* 印刷 */
-function printItem(index) {
-  const saved = JSON.parse(localStorage.getItem("data") || "[]");
-  const d = saved[index];
-
-  const w = window.open("", "_blank");
-
-  w.document.write(`
-    <h1>株式会社塚腰運送</h1>
-    <h2>下見報告書</h2>
-
-    <p>ご依頼者様：${d.client}</p>
-    <p>日時：${d.date}</p>
-    <p>場所：${d.location}</p>
-
-    <p>現場名：${d.siteName}</p>
-    <p>担当者：${d.person}</p>
-    <p>連絡先：${d.tel}</p>
-
-    <p>作業内容：${d.work}</p>
-    <p>作業人数：${d.workers}</p>
-    <p>必要車両：${d.vehicle.join("、")}</p>
-    <p>必要な道具・材料：${d.tools}</p>
-    <p>現場状況：${d.condition}</p>
-    <p>駐車スペース：${d.parking}</p>
-
-    <p>搬入経路：${d.route}</p>
-    <p>危険箇所：${d.danger}</p>
-
-    <p>備考：${d.note}</p>
-
-    <h3>写真</h3>
-    ${d.photos.map(p => `<img src="${p}" style="width:150px;margin:5px;">`).join("")}
-  `);
-
-  w.print();
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
 }
-
-/* メール送信 */
-function sendMail(index) {
-  const saved = JSON.parse(localStorage.getItem("data") || "[]");
-  const d = saved[index];
-
-  const body = `
-株式会社塚腰運送
-
-ご依頼者様：${d.client}
-日時：${d.date}
-場所：${d.location}
-
-現場名：${d.siteName}
-担当者：${d.person}
-連絡先：${d.tel}
-
-作業内容：${d.work}
-作業人数：${d.workers}
-必要車両：${d.vehicle.join("、")}
-必要な道具・材料：${d.tools}
-現場状況：${d.condition}
-駐車スペース：${d.parking}
-
-搬入経路：${d.route}
-危険箇所：${d.danger}
-
-備考：${d.note}
-  `;
-
-  const mailto = `mailto:?subject=下見報告書&body=${encodeURIComponent(body)}`;
-  window.location.href = mailto;
-}
-
-load();
 </script>
 
 </body>
