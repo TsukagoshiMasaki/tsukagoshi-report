@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>下見報告書</title>
-
+<!-- PDF生成ライブラリ（jsPDF） -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <!-- Tailwind CSS -->
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
@@ -426,13 +427,30 @@
   </div>
 
 
-  <!-- ========================= -->
-  <!-- メール本文プレビュー -->
-  <!-- ========================= -->
-  <div class="mt-4">
-    <label class="font-semibold">メール本文プレビュー</label>
-    <textarea id="mailPreview" class="w-full p-3 border rounded h-48" readonly></textarea>
-  </div>
+<!-- ========================= -->
+<!-- 図面ページ（手書きキャンバス） -->
+<!-- ========================= -->
+<div id="drawingSection" class="mt-6 space-y-4">
+
+  <h3 class="text-lg font-bold border-b pb-1">図面ページ</h3>
+
+  <!-- ページ追加ボタン -->
+  <button type="button" onclick="addDrawingPage()" 
+    class="px-4 py-2 bg-blue-700 text-white rounded">
+    図面ページを追加
+  </button>
+
+  <!-- 図面ページを入れるコンテナ -->
+  <div id="drawingPages" class="space-y-6"></div>
+
+  <!-- PDF生成ボタン（第2弾で中身追加） -->
+  <button type="button" onclick="generatePDF()" 
+    class="px-4 py-2 bg-green-700 text-white rounded">
+    PDF生成（図面含む）
+  </button>
+
+</div>
+
 
 </form>
 
@@ -638,6 +656,151 @@ function sendMail() {
   }
 
   window.location.href = mailto;
+}
+
+// ===============================
+// 図面ページ：キャンバス生成とページ追加（完全版）
+// ===============================
+
+let drawingPageCount = 0;
+
+// 図面ページを追加する関数
+function addDrawingPage() {
+    drawingPageCount++;
+
+    const pageId = `drawingPage_${drawingPageCount}`;
+    const canvasId = `canvas_${drawingPageCount}`;
+    const container = document.getElementById("drawingPages");
+
+    const pageHTML = `
+      <div id="${pageId}" class="border p-4 rounded bg-gray-50">
+        <h4 class="font-semibold mb-2">図面ページ ${drawingPageCount}</h4>
+
+        <canvas id="${canvasId}" width="800" height="600" class="border bg-white"></canvas>
+
+        <div class="flex space-x-2 mt-3">
+          <button onclick="setPen('${canvasId}')" class="px-3 py-1 bg-blue-600 text-white rounded">ペン</button>
+          <button onclick="setEraser('${canvasId}')" class="px-3 py-1 bg-gray-600 text-white rounded">消しゴム</button>
+          <button onclick="clearCanvas('${canvasId}')" class="px-3 py-1 bg-red-600 text-white rounded">全消去</button>
+          <button onclick="deletePage('${pageId}')" class="px-3 py-1 bg-black text-white rounded">ページ削除</button>
+        </div>
+      </div>
+    `;
+
+    container.insertAdjacentHTML("beforeend", pageHTML);
+
+    // ★ キャンバス初期化（これが無いと描けない）
+    initCanvas(canvasId);
+}
+function initCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext("2d");
+
+    let drawing = false;
+
+    canvas.addEventListener("mousedown", (e) => {
+        drawing = true;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+    });
+
+    canvas.addEventListener("mouseup", () => drawing = false);
+    canvas.addEventListener("mouseleave", () => drawing = false);
+
+    canvas.addEventListener("mousemove", (e) => {
+        if (!drawing) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const mode = canvas.dataset.mode;
+
+        ctx.lineWidth = mode === "eraser" ? 20 : 3;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = mode === "eraser" ? "#ffffff" : "#000000";
+
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+    });
+
+    canvas.dataset.mode = "pen";
+}
+
+
+// ペンに切り替え
+function setPen(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    canvas.dataset.mode = "pen";
+}
+
+// 消しゴムに切り替え
+function setEraser(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    canvas.dataset.mode = "eraser";
+}
+
+// 全消去（そのキャンバスだけ）
+function clearCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// ページ削除（そのページだけ）
+function deletePage(pageId) {
+    const page = document.getElementById(pageId);
+    if (page) {
+        page.remove();
+    }
+}
+
+// ===============================
+// PDF生成（図面ページ全部入り）
+// ===============================
+async function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: "a4"
+    });
+
+    const pages = document.querySelectorAll("#drawingPages > div");
+
+    if (pages.length === 0) {
+        alert("図面ページがありません！");
+        return;
+    }
+
+    let firstPage = true;
+
+    for (const page of pages) {
+        const canvas = page.querySelector("canvas");
+        if (!canvas) continue;
+
+        const imgData = canvas.toDataURL("image/png");
+
+        if (!firstPage) {
+            pdf.addPage();
+        }
+        firstPage = false;
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const imgWidth = pageWidth - 40;  // 余白
+        const imgHeight = (canvas.height / canvas.width) * imgWidth;
+
+        pdf.addImage(imgData, "PNG", 20, 20, imgWidth, imgHeight);
+    }
+
+    pdf.save("drawing.pdf");
 }
 
 
